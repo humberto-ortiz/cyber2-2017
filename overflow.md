@@ -103,4 +103,13 @@ native process 6846 In: read_req                             L??   PC: 0x40056a
 
 Use the `nexti` instruction to single step the debugger until the
 program crashes. You can see the stack frame with the `info frame`
-command, and examine memory with the 
+command, and examine memory with the `x` comand:
+
+```
+(gdb) x/16w 0x7fffffffdfd0
+0x7fffffffdfd0: 0xffffdfe0      0x00007fff      0x004005aa      0x00000000
+0x7fffffffdfe0: 0x004005b0      0x00000000      0xf7a2d830      0x00007fff
+0x7fffffffdff0: 0x00000000      0x00000000      0xffffe0c8      0x00007fff
+0x7fffffffe000: 0xf7ffcca0      0x00000001      0x004005a1      0x00000000
+(gdb) 
+```

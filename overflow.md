@@ -101,15 +101,43 @@ native process 6846 In: read_req                             L??   PC: 0x40056a
 (gdb) 
 ```
 
+The `info frame` command shows the stack frame before overflow:
+
+```
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffdfe0:
+ rip = 0x400571 in read_req (read_req.c:6); saved rip = 0x4005aa
+ called by frame at 0x7fffffffdff0
+ source language c.
+ Arglist at 0x7fffffffdfd0, args:
+ Locals at 0x7fffffffdfd0, Previous frame's sp is 0x7fffffffdfe0
+ Saved registers:
+  rbp at 0x7fffffffdfd0, rip at 0x7fffffffdfd8
+```
+The info locals command shows the varibales local to this function.
+```
+(gdb) info locals
+buf = '\000' <repeats 14 times>, "\377", '\000' <repeats 81 times>, "\001\000\00
+0\000\000\000\000\000\375\005@", '\000' <repeats 20 times>
+i = 0
+```
 Use the `nexti` instruction to single step the debugger until the
 program crashes. You can see the stack frame with the `info frame`
 command, and examine memory with the `x` comand:
 
 ```
+(gdb) info frame
+Stack level 0, frame at 0x7fffffffdfe0:
+ rip = 0x400585 in read_req (read_req.c:7); saved rip = 0x4141414141414141
+ called by frame at 0x7fffffffdfe8
+ source language c.
+ Arglist at 0x7fffffffdfd0, args:
+ Locals at 0x7fffffffdfd0, Previous frame's sp is 0x7fffffffdfe0
+ Saved registers:
+ rbp at 0x7fffffffdfd0, rip at 0x7fffffffdfd8
 (gdb) x/16w 0x7fffffffdfd0
-0x7fffffffdfd0: 0xffffdfe0      0x00007fff      0x004005aa      0x00000000
-0x7fffffffdfe0: 0x004005b0      0x00000000      0xf7a2d830      0x00007fff
-0x7fffffffdff0: 0x00000000      0x00000000      0xffffe0c8      0x00007fff
-0x7fffffffe000: 0xf7ffcca0      0x00000001      0x004005a1      0x00000000
-(gdb) 
+0x7fffffffdfd0: 0x41414141      0x41414141      0x41414141      0x41414141
+0x7fffffffdfe0: 0x41414141      0x41414141      0x41414141      0x41414141
+0x7fffffffdff0: 0x41414141      0x41414141      0x41414141      0x41414141
+0x7fffffffe000: 0x41414141      0x41414141      0x41414141      0x41414141
 ```
